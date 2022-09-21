@@ -1,9 +1,13 @@
 const tabelaJogadores = document.querySelector('#tabelaJogadores');
+
 const btnVitoria = document.querySelector('.btn-vitoria');
 const btnEmpate = document.querySelector('.btn-empate');
 const btnDerrota = document.querySelector('.btn-derrota');
+const btnAdd = document.querySelector('.btn-add');
 
-const jogador = { nome: "", vitorias: 0, empates: 0, derrotas: 0, pontos: 0 }
+const inputNovoJogador = document.querySelector('.input-nome');
+
+
 
 let jogadores = [];
 
@@ -11,13 +15,13 @@ const calculaPontos = (jogadorDaVez, tdPontos) => {
     jogadorDaVez.pontos += (3 * jogadorDaVez.vitorias) + jogadorDaVez.empates - jogadorDaVez.derrotas;
     tdPontos.innerHTML += jogadorDaVez.pontos;
 
-    for (let i = 0; i < jogadores.length; i++){
+    for (let i = 0; i < jogadores.length; i++) {
         jogadores[i].pontos = (3 * jogadores[i].vitorias) + jogadores[i].empates - jogadores[i].derrotas;
     }
 
     tabelaJogadores.innerHTML = "";
 
-    for (let i = 0; i < jogadores.length; i++){
+    for (let i = 0; i < jogadores.length; i++) {
         montaElementoJogador(jogadores[i]);
     }
 }
@@ -26,57 +30,57 @@ const atribuiVitorias = (jogadorDaVez, tdVitorias) => {
     jogadorDaVez.vitorias += 1;
     tdVitorias.innerHTML = jogadorDaVez.vitorias;
 
-    for (let i = 0; i < jogadores.length; i++){
-        if(jogadorDaVez.nome == jogadores[i].nome){
+    for (let i = 0; i < jogadores.length; i++) {
+        if (jogadorDaVez.nome == jogadores[i].nome) {
             continue;
         }
         jogadores[i].derrotas += 1;
     }
 
     tabelaJogadores.innerHTML = "";
-    
-    for(let i = 0; i < jogadores.length; i++){
+
+    for (let i = 0; i < jogadores.length; i++) {
         montaElementoJogador(jogadores[i]);
     }
-    
+
 }
 
-const atribuiDerrotas = ( jogadorDaVez, tdDerrotas) => {
+const atribuiDerrotas = (jogadorDaVez, tdDerrotas) => {
     jogadorDaVez.derrotas += 1;
     tdDerrotas.innerHTML = jogadorDaVez.derrotas;
 
-    for (let i = 0; i < jogadores.length; i++){
-        if(jogadorDaVez.nome == jogadores[i].nome){
+    for (let i = 0; i < jogadores.length; i++) {
+        if (jogadorDaVez.nome == jogadores[i].nome) {
             continue;
         }
         jogadores[i].vitorias += 1;
     }
 
     tabelaJogadores.innerHTML = "";
-    
-    for(let i = 0; i < jogadores.length; i++){
+
+    for (let i = 0; i < jogadores.length; i++) {
         montaElementoJogador(jogadores[i]);
     }
 }
 
-const atribuiEmpates = (jogadorDaVez, tdEmpates)=> {
-    
+const atribuiEmpates = (jogadorDaVez, tdEmpates) => {
+
     jogadorDaVez.empates += 1;
     tdEmpates.innerHTML = jogadorDaVez.empates;
 
-    for (let i = 0; i < jogadores.length; i++){
-        if(jogadorDaVez.nome == jogadores[i].nome){
+    for (let i = 0; i < jogadores.length; i++) {
+        if (jogadorDaVez.nome == jogadores[i].nome) {
             continue;
         }
         jogadores[i].empates += 1;
     }
 
     tabelaJogadores.innerHTML = "";
-    
-    for(let i = 0; i < jogadores.length; i++){
+
+    for (let i = 0; i < jogadores.length; i++) {
         montaElementoJogador(jogadores[i]);
     }
-} 
+}
 
 const montaElementoJogador = (jogadorDaVez) => {
 
@@ -113,7 +117,7 @@ const montaElementoJogador = (jogadorDaVez) => {
     tdAcoesDerrota.insertAdjacentElement("beforeend", btnDerrota);
     btnDerrota.addEventListener("click", (event) => {
         event.preventDefault();
-        atribuiDerrotas(jogadorDaVez,tdDerrotas);
+        atribuiDerrotas(jogadorDaVez, tdDerrotas);
         calculaPontos(jogadorDaVez, tdPontos);
     })
 
@@ -125,7 +129,7 @@ const montaElementoJogador = (jogadorDaVez) => {
     tdAcoesEmpate.insertAdjacentElement("beforeend", btnEmpate);
     btnEmpate.addEventListener("click", (event) => {
         event.preventDefault();
-        atribuiEmpates(jogadorDaVez,tdEmpates);
+        atribuiEmpates(jogadorDaVez, tdEmpates);
         calculaPontos(jogadorDaVez, tdPontos);
     })
 
@@ -141,7 +145,26 @@ const montaElementoJogador = (jogadorDaVez) => {
     tabelaJogadores.insertAdjacentElement("beforeend", tr);
 }
 
+const addJogador = (nomeDoJogador) => {
+    const jogador = { nome: "", vitorias: 0, empates: 0, derrotas: 0, pontos: 0 }
+    jogador.nome = nomeDoJogador;
+    jogadores.push(jogador);
+    exibeJogadores();
+}
 
+const exibeJogadores = () => {
+    tabelaJogadores.innerHTML = "";
+    for (let i = 0; i < jogadores.length; i++) {
+        montaElementoJogador(jogadores[i]);
+    }
+}
+
+btnAdd.addEventListener("click", (event) => {
+    event.preventDefault();
+    addJogador(inputNovoJogador.value);
+    inputNovoJogador.value = ""
+    
+})
 
 jogadores[0] = {
     nome: "Paulo",
@@ -167,6 +190,4 @@ jogadores[2] = {
     pontos: 0
 }
 
-montaElementoJogador(jogadores[0]);
-montaElementoJogador(jogadores[1]);
-montaElementoJogador(jogadores[2]);
+exibeJogadores();
